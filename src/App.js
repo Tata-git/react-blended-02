@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
+import { Button } from "./Button/Button";
+import { getMovies } from "./Services/api";
+import { mapperFilms } from "./Utils/mapper";
+import { MoviesGallery } from "./Gallery/Gallery";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import "./App.css";
+
+export class App extends Component {
+  state = {
+    movies: [],
+    page: 1,
+    isLoading: false,
+  };
+  fetchMovies = () => {
+    const { page } = this.state;
+
+    this.setState({ isLoading: true });
+    getMovies(page)
+      .then(({ data }) => this.setState({ movies: mapperFilms(data.results) }))
+      .catch((error) => console.log(error))
+      .finally(this.setState({ isLoading: false }));
+  };
+
+  render() {
+    const { movies } = this.state;
+    return (
+      <>
+        {movies.length === 0 && (
+          <Button text="Show films list" handleClick={this.fetchMovies} />
+        )}
+        <MoviesGallery movies={movies} />
+      </>
+    );
+  }
 }
 
 export default App;
