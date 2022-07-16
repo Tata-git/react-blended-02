@@ -9,4 +9,4 @@ axios.defaults.baseURL = BASE_URL;
 // https://api.themoviedb.org/3/trending/all/week?api_key={API_KEY}
 
 export const getMovies = (page) =>
-  axios.get(`trending/movie/week?api_key=${API_KEY}&p=${page}`);
+  axios.get(`trending/movie/week?api_key=${API_KEY}&page=${page}`);
