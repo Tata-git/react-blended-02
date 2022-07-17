@@ -1,6 +1,9 @@
+import { Button } from "../Button/Button";
+
 export const FilmCard = ({
   movie: { votes, title, watched, poster },
   handleStatus,
+  handleModal,
   id,
 }) => {
   return (
@@ -11,6 +14,7 @@ export const FilmCard = ({
         Watched:{" "}
         <span onClick={() => handleStatus(id)}>{watched.toString()}</span>
       </p>
+      <Button text="Show poster" handleClick={() => handleModal(poster)} />
     </li>
   );
 };

@@ -1,4 +1,4 @@
-// export PropTypes from ''
+import PropTypes from "prop-types";
 
 export const Button = ({ handleClick, text }) => {
   return (
@@ -8,6 +8,7 @@ export const Button = ({ handleClick, text }) => {
   );
 };
 
-// Button.propTypes = {
-// handleClick: Prop
-// }
+Button.propTypes = {
+  handleClick: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+};

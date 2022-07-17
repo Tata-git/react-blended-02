@@ -2,8 +2,8 @@ import { Component } from "react";
 import { Button } from "./Button/Button";
 import { getMovies } from "./Services/api";
 import { mapperFilms } from "./Utils/mapper";
-import { MoviesGallery } from "./Gallery/Gallery";
-
+import { MoviesGallery } from "./MoviesGallery/MoviesGallery";
+import { Modal } from "./Modal/Modal";
 import "./App.css";
 
 class App extends Component {
@@ -11,16 +11,17 @@ class App extends Component {
     movies: [],
     page: 1,
     isLoading: false,
+    poster: "",
   };
-
+  //-------- компонент оновлено ---------------
   componentDidUpdate(_, prevState) {
     const { page } = this.state;
     if (prevState.page !== page) this.fetchMovies(page);
   }
-
+  //-------------отримати фільми -------------
   fetchMovies = (page) => {
-    // const { page } = this.state;
     console.log(page);
+
     this.setState({ isLoading: true });
 
     getMovies(page)
@@ -34,12 +35,14 @@ class App extends Component {
         this.setState({ isLoading: false });
       });
   };
-
+  //----------- обробник Завантажити більше -----------
   handlerLoadMore = () => {
     this.setState((prevState) => ({ page: prevState.page + 1 }));
   };
-
+  //-----------  перемкнути статус -----------------
   toggleStatus = (id) => {
+    console.log(id);
+
     const { movies } = this.state;
 
     const newMovies = movies.map((movie) => {
@@ -51,8 +54,16 @@ class App extends Component {
     this.setState({ movies: newMovies });
   };
 
+  openModal = (poster) => {
+    this.setState({ poster });
+  };
+  closeModal = () => {
+    this.setState({ poster: " " });
+  };
+
   render() {
-    const { movies, page, isLoading } = this.state;
+    const { movies, page, isLoading, poster } = this.state;
+
     return (
       <>
         {movies.length === 0 && (
@@ -61,11 +72,16 @@ class App extends Component {
             handleClick={() => this.fetchMovies(page)}
           />
         )}
-        <MoviesGallery movies={movies} handleStatus={this.toggleStatus} />
+        <MoviesGallery
+          movies={movies}
+          handleStatus={this.toggleStatus}
+          handleModal={this.openModal}
+        />
         {movies.length > 1 && (
           <Button text="Load more" handleClick={this.handlerLoadMore} />
         )}
         {isLoading && <p>Loading...</p>}
+        {poster && <Modal poster={poster} closeModal={this.closeModal} />}
       </>
     );
   }
